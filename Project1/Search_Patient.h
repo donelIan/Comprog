@@ -219,7 +219,7 @@ private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System
 }
 private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
 }
-private: System::Void label1_Click_2(System::Object^ sender, System::EventArgs^ e) {PatientRecords
+private: System::Void label1_Click_2(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
