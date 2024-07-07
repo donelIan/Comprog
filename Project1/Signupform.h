@@ -1,4 +1,9 @@
 #pragma once
+#include <mysql_driver.h>
+#include <mysql_connection.h>
+#include <cppconn/prepared_statement.h>
+#include <chrono>
+#include <ctime>
 
 namespace Project1 {
 
@@ -9,24 +14,15 @@ namespace Project1 {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Summary for MyForm1
-	/// </summary>
 	public ref class MyForm1 : public System::Windows::Forms::Form
 	{
 	public:
 		MyForm1(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
 		}
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
 		~MyForm1()
 		{
 			if (components)
@@ -34,416 +30,232 @@ namespace Project1 {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::TextBox^ Fullname;
-	protected:
 
-	protected:
-	private: System::Windows::Forms::Label^ label1;
-	private: System::Windows::Forms::Label^ label2;
-	private: System::Windows::Forms::TextBox^ age;
-
-	private: System::Windows::Forms::Label^ label3;
-
-	private: System::Windows::Forms::Label^ label4;
-	private: System::Windows::Forms::TextBox^ Contact;
-
-	private: System::Windows::Forms::Label^ label5;
-	private: System::Windows::Forms::TextBox^ Address;
-
-	private: System::Windows::Forms::Label^ label6;
-	private: System::Windows::Forms::TextBox^ birthplace;
-
-	private: System::Windows::Forms::Label^ label7;
-	private: System::Windows::Forms::TextBox^ nationality;
-
-	private: System::Windows::Forms::Label^ label8;
-	private: System::Windows::Forms::TextBox^ religion;
-
-	private: System::Windows::Forms::Label^ label9;
-
-	private: System::Windows::Forms::Label^ label10;
-	private: System::Windows::Forms::TextBox^ textBox10;
-	private: System::Windows::Forms::Label^ label11;
-	private: System::Windows::Forms::TextBox^ bloodtype;
-
-	private: System::Windows::Forms::Label^ label12;
-	private: System::Windows::Forms::TextBox^ email;
-
-	private: System::Windows::Forms::TextBox^ Diagnosis;
-
-	private: System::Windows::Forms::Button^ button1;
-	private: System::Windows::Forms::Button^ button2;
-	private: System::Windows::Forms::Button^ BackButton;
-
-	private: System::Windows::Forms::Label^ label14;
-	private: System::Windows::Forms::ComboBox^ Gender;
-	private: System::Windows::Forms::ComboBox^ CivilStatus;
-
-
-
-	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		System::ComponentModel::Container ^components;
+	private: System::Windows::Forms::TextBox^ nameBox;
+	private: System::Windows::Forms::TextBox^ ageBox;
+	private: System::Windows::Forms::TextBox^ genderBox;
+	private: System::Windows::Forms::TextBox^ contactBox;
+	private: System::Windows::Forms::TextBox^ addressBox;
+	private: System::Windows::Forms::TextBox^ birthplaceBox;
+	private: System::Windows::Forms::TextBox^ nationalityBox;
+	private: System::Windows::Forms::TextBox^ religionBox;
+	private: System::Windows::Forms::TextBox^ civilBox;
+	private: System::Windows::Forms::TextBox^ birthBox;
+	private: System::Windows::Forms::TextBox^ bloodBox;
+	private: System::Windows::Forms::TextBox^ emailBox;
+	private: System::Windows::Forms::TextBox^ diagnosisBox;
+	private: System::Windows::Forms::Button^ submitButton;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->Fullname = (gcnew System::Windows::Forms::TextBox());
-			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->age = (gcnew System::Windows::Forms::TextBox());
-			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->Contact = (gcnew System::Windows::Forms::TextBox());
-			this->label5 = (gcnew System::Windows::Forms::Label());
-			this->Address = (gcnew System::Windows::Forms::TextBox());
-			this->label6 = (gcnew System::Windows::Forms::Label());
-			this->birthplace = (gcnew System::Windows::Forms::TextBox());
-			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->nationality = (gcnew System::Windows::Forms::TextBox());
-			this->label8 = (gcnew System::Windows::Forms::Label());
-			this->religion = (gcnew System::Windows::Forms::TextBox());
-			this->label9 = (gcnew System::Windows::Forms::Label());
-			this->label10 = (gcnew System::Windows::Forms::Label());
-			this->textBox10 = (gcnew System::Windows::Forms::TextBox());
-			this->label11 = (gcnew System::Windows::Forms::Label());
-			this->bloodtype = (gcnew System::Windows::Forms::TextBox());
-			this->label12 = (gcnew System::Windows::Forms::Label());
-			this->email = (gcnew System::Windows::Forms::TextBox());
-			this->Diagnosis = (gcnew System::Windows::Forms::TextBox());
-			this->button1 = (gcnew System::Windows::Forms::Button());
-			this->button2 = (gcnew System::Windows::Forms::Button());
-			this->BackButton = (gcnew System::Windows::Forms::Button());
-			this->label14 = (gcnew System::Windows::Forms::Label());
-			this->Gender = (gcnew System::Windows::Forms::ComboBox());
-			this->CivilStatus = (gcnew System::Windows::Forms::ComboBox());
+			this->nameBox = (gcnew System::Windows::Forms::TextBox());
+			this->ageBox = (gcnew System::Windows::Forms::TextBox());
+			this->genderBox = (gcnew System::Windows::Forms::TextBox());
+			this->contactBox = (gcnew System::Windows::Forms::TextBox());
+			this->addressBox = (gcnew System::Windows::Forms::TextBox());
+			this->birthplaceBox = (gcnew System::Windows::Forms::TextBox());
+			this->nationalityBox = (gcnew System::Windows::Forms::TextBox());
+			this->religionBox = (gcnew System::Windows::Forms::TextBox());
+			this->civilBox = (gcnew System::Windows::Forms::TextBox());
+			this->birthBox = (gcnew System::Windows::Forms::TextBox());
+			this->bloodBox = (gcnew System::Windows::Forms::TextBox());
+			this->emailBox = (gcnew System::Windows::Forms::TextBox());
+			this->diagnosisBox = (gcnew System::Windows::Forms::TextBox());
+			this->submitButton = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
-			// Fullname
+			// nameBox
 			// 
-			this->Fullname->Location = System::Drawing::Point(73, 56);
-			this->Fullname->Name = L"Fullname";
-			this->Fullname->Size = System::Drawing::Size(282, 20);
-			this->Fullname->TabIndex = 0;
+			this->nameBox->Location = System::Drawing::Point(50, 30);
+			this->nameBox->Name = L"nameBox";
+			this->nameBox->Size = System::Drawing::Size(200, 20);
+			this->nameBox->TabIndex = 0;
+			this->nameBox->Text = L"Name";
 			// 
-			// label1
+			// ageBox
 			// 
-			this->label1->AutoSize = true;
-			this->label1->BackColor = System::Drawing::Color::White;
-			this->label1->Location = System::Drawing::Point(8, 56);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(35, 13);
-			this->label1->TabIndex = 1;
-			this->label1->Text = L"Name";
-			this->label1->Click += gcnew System::EventHandler(this, &MyForm1::label1_Click);
+			this->ageBox->Location = System::Drawing::Point(50, 60);
+			this->ageBox->Name = L"ageBox";
+			this->ageBox->Size = System::Drawing::Size(200, 20);
+			this->ageBox->TabIndex = 1;
+			this->ageBox->Text = L"Age";
 			// 
-			// label2
+			// genderBox
 			// 
-			this->label2->AutoSize = true;
-			this->label2->BackColor = System::Drawing::Color::White;
-			this->label2->Location = System::Drawing::Point(8, 96);
-			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(26, 13);
-			this->label2->TabIndex = 3;
-			this->label2->Text = L"Age";
+			this->genderBox->Location = System::Drawing::Point(50, 90);
+			this->genderBox->Name = L"genderBox";
+			this->genderBox->Size = System::Drawing::Size(200, 20);
+			this->genderBox->TabIndex = 2;
+			this->genderBox->Text = L"Gender";
 			// 
-			// age
+			// contactBox
 			// 
-			this->age->Location = System::Drawing::Point(73, 96);
-			this->age->Name = L"age";
-			this->age->Size = System::Drawing::Size(107, 20);
-			this->age->TabIndex = 2;
+			this->contactBox->Location = System::Drawing::Point(50, 120);
+			this->contactBox->Name = L"contactBox";
+			this->contactBox->Size = System::Drawing::Size(200, 20);
+			this->contactBox->TabIndex = 3;
+			this->contactBox->Text = L"Contact Number";
 			// 
-			// label3
+			// addressBox
 			// 
-			this->label3->AutoSize = true;
-			this->label3->BackColor = System::Drawing::Color::White;
-			this->label3->Location = System::Drawing::Point(8, 133);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(42, 13);
-			this->label3->TabIndex = 5;
-			this->label3->Text = L"Gender";
+			this->addressBox->Location = System::Drawing::Point(50, 150);
+			this->addressBox->Name = L"addressBox";
+			this->addressBox->Size = System::Drawing::Size(200, 20);
+			this->addressBox->TabIndex = 4;
+			this->addressBox->Text = L"Address";
 			// 
-			// label4
+			// birthplaceBox
 			// 
-			this->label4->AutoSize = true;
-			this->label4->BackColor = System::Drawing::Color::White;
-			this->label4->Location = System::Drawing::Point(8, 169);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(44, 13);
-			this->label4->TabIndex = 7;
-			this->label4->Text = L"Contact";
+			this->birthplaceBox->Location = System::Drawing::Point(50, 180);
+			this->birthplaceBox->Name = L"birthplaceBox";
+			this->birthplaceBox->Size = System::Drawing::Size(200, 20);
+			this->birthplaceBox->TabIndex = 5;
+			this->birthplaceBox->Text = L"Birthplace";
 			// 
-			// Contact
+			// nationalityBox
 			// 
-			this->Contact->Location = System::Drawing::Point(73, 169);
-			this->Contact->Name = L"Contact";
-			this->Contact->Size = System::Drawing::Size(282, 20);
-			this->Contact->TabIndex = 6;
+			this->nationalityBox->Location = System::Drawing::Point(50, 210);
+			this->nationalityBox->Name = L"nationalityBox";
+			this->nationalityBox->Size = System::Drawing::Size(200, 20);
+			this->nationalityBox->TabIndex = 6;
+			this->nationalityBox->Text = L"Nationality";
 			// 
-			// label5
+			// religionBox
 			// 
-			this->label5->AutoSize = true;
-			this->label5->BackColor = System::Drawing::Color::White;
-			this->label5->Location = System::Drawing::Point(8, 204);
-			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(45, 13);
-			this->label5->TabIndex = 9;
-			this->label5->Text = L"Address";
+			this->religionBox->Location = System::Drawing::Point(50, 240);
+			this->religionBox->Name = L"religionBox";
+			this->religionBox->Size = System::Drawing::Size(200, 20);
+			this->religionBox->TabIndex = 7;
+			this->religionBox->Text = L"Religion";
 			// 
-			// Address
+			// civilBox
 			// 
-			this->Address->Location = System::Drawing::Point(73, 204);
-			this->Address->Name = L"Address";
-			this->Address->Size = System::Drawing::Size(282, 20);
-			this->Address->TabIndex = 8;
+			this->civilBox->Location = System::Drawing::Point(50, 270);
+			this->civilBox->Name = L"civilBox";
+			this->civilBox->Size = System::Drawing::Size(200, 20);
+			this->civilBox->TabIndex = 8;
+			this->civilBox->Text = L"Civil Status";
 			// 
-			// label6
+			// birthBox
 			// 
-			this->label6->AutoSize = true;
-			this->label6->BackColor = System::Drawing::Color::White;
-			this->label6->Location = System::Drawing::Point(8, 242);
-			this->label6->Name = L"label6";
-			this->label6->Size = System::Drawing::Size(54, 13);
-			this->label6->TabIndex = 11;
-			this->label6->Text = L"Birthpalce";
+			this->birthBox->Location = System::Drawing::Point(50, 300);
+			this->birthBox->Name = L"birthBox";
+			this->birthBox->Size = System::Drawing::Size(200, 20);
+			this->birthBox->TabIndex = 9;
+			this->birthBox->Text = L"Birthday (YYYY-MM-DD)";
 			// 
-			// birthplace
+			// bloodBox
 			// 
-			this->birthplace->Location = System::Drawing::Point(73, 242);
-			this->birthplace->Name = L"birthplace";
-			this->birthplace->Size = System::Drawing::Size(282, 20);
-			this->birthplace->TabIndex = 10;
+			this->bloodBox->Location = System::Drawing::Point(50, 330);
+			this->bloodBox->Name = L"bloodBox";
+			this->bloodBox->Size = System::Drawing::Size(200, 20);
+			this->bloodBox->TabIndex = 10;
+			this->bloodBox->Text = L"Blood Type";
 			// 
-			// label7
+			// emailBox
 			// 
-			this->label7->AutoSize = true;
-			this->label7->BackColor = System::Drawing::Color::White;
-			this->label7->Location = System::Drawing::Point(8, 277);
-			this->label7->Name = L"label7";
-			this->label7->Size = System::Drawing::Size(56, 13);
-			this->label7->TabIndex = 13;
-			this->label7->Text = L"Nationality";
+			this->emailBox->Location = System::Drawing::Point(50, 360);
+			this->emailBox->Name = L"emailBox";
+			this->emailBox->Size = System::Drawing::Size(200, 20);
+			this->emailBox->TabIndex = 11;
+			this->emailBox->Text = L"Email Address";
 			// 
-			// nationality
+			// diagnosisBox
 			// 
-			this->nationality->Location = System::Drawing::Point(73, 277);
-			this->nationality->Name = L"nationality";
-			this->nationality->Size = System::Drawing::Size(282, 20);
-			this->nationality->TabIndex = 12;
+			this->diagnosisBox->Location = System::Drawing::Point(50, 390);
+			this->diagnosisBox->Name = L"diagnosisBox";
+			this->diagnosisBox->Size = System::Drawing::Size(200, 20);
+			this->diagnosisBox->TabIndex = 12;
+			this->diagnosisBox->Text = L"Final Diagnosis";
 			// 
-			// label8
+			// submitButton
 			// 
-			this->label8->AutoSize = true;
-			this->label8->BackColor = System::Drawing::Color::White;
-			this->label8->Location = System::Drawing::Point(8, 315);
-			this->label8->Name = L"label8";
-			this->label8->Size = System::Drawing::Size(45, 13);
-			this->label8->TabIndex = 15;
-			this->label8->Text = L"Religion";
-			// 
-			// religion
-			// 
-			this->religion->Location = System::Drawing::Point(73, 315);
-			this->religion->Name = L"religion";
-			this->religion->Size = System::Drawing::Size(282, 20);
-			this->religion->TabIndex = 14;
-			// 
-			// label9
-			// 
-			this->label9->AutoSize = true;
-			this->label9->BackColor = System::Drawing::Color::White;
-			this->label9->Location = System::Drawing::Point(8, 353);
-			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(59, 13);
-			this->label9->TabIndex = 17;
-			this->label9->Text = L"Civil Status";
-			// 
-			// label10
-			// 
-			this->label10->AutoSize = true;
-			this->label10->BackColor = System::Drawing::Color::White;
-			this->label10->Location = System::Drawing::Point(368, 53);
-			this->label10->Name = L"label10";
-			this->label10->Size = System::Drawing::Size(49, 13);
-			this->label10->TabIndex = 19;
-			this->label10->Text = L"Birthdate";
-			// 
-			// textBox10
-			// 
-			this->textBox10->Location = System::Drawing::Point(431, 53);
-			this->textBox10->Name = L"textBox10";
-			this->textBox10->Size = System::Drawing::Size(121, 20);
-			this->textBox10->TabIndex = 18;
-			// 
-			// label11
-			// 
-			this->label11->AutoSize = true;
-			this->label11->BackColor = System::Drawing::Color::White;
-			this->label11->Location = System::Drawing::Point(368, 96);
-			this->label11->Name = L"label11";
-			this->label11->Size = System::Drawing::Size(57, 13);
-			this->label11->TabIndex = 21;
-			this->label11->Text = L"Blood type";
-			// 
-			// bloodtype
-			// 
-			this->bloodtype->Location = System::Drawing::Point(431, 96);
-			this->bloodtype->Name = L"bloodtype";
-			this->bloodtype->Size = System::Drawing::Size(282, 20);
-			this->bloodtype->TabIndex = 20;
-			// 
-			// label12
-			// 
-			this->label12->AutoSize = true;
-			this->label12->BackColor = System::Drawing::Color::White;
-			this->label12->Location = System::Drawing::Point(368, 133);
-			this->label12->Name = L"label12";
-			this->label12->Size = System::Drawing::Size(32, 13);
-			this->label12->TabIndex = 23;
-			this->label12->Text = L"Email";
-			// 
-			// email
-			// 
-			this->email->Location = System::Drawing::Point(431, 133);
-			this->email->Name = L"email";
-			this->email->Size = System::Drawing::Size(282, 20);
-			this->email->TabIndex = 22;
-			// 
-			// Diagnosis
-			// 
-			this->Diagnosis->BackColor = System::Drawing::Color::White;
-			this->Diagnosis->Cursor = System::Windows::Forms::Cursors::Cross;
-			this->Diagnosis->ForeColor = System::Drawing::SystemColors::WindowText;
-			this->Diagnosis->Location = System::Drawing::Point(409, 204);
-			this->Diagnosis->Name = L"Diagnosis";
-			this->Diagnosis->Size = System::Drawing::Size(281, 20);
-			this->Diagnosis->TabIndex = 24;
-			this->Diagnosis->Text = L"(Diagnosis)";
-			this->Diagnosis->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-			// 
-			// button1
-			// 
-			this->button1->BackColor = System::Drawing::Color::IndianRed;
-			this->button1->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->button1->Location = System::Drawing::Point(418, 333);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(84, 30);
-			this->button1->TabIndex = 25;
-			this->button1->Text = L"Clear";
-			this->button1->UseVisualStyleBackColor = false;
-			this->button1->Click += gcnew System::EventHandler(this, &MyForm1::button1_Click);
-			// 
-			// button2
-			// 
-			this->button2->BackColor = System::Drawing::SystemColors::MenuHighlight;
-			this->button2->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->button2->Location = System::Drawing::Point(536, 333);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(84, 29);
-			this->button2->TabIndex = 26;
-			this->button2->Text = L"Submit";
-			this->button2->UseVisualStyleBackColor = false;
-			// 
-			// BackButton
-			// 
-			this->BackButton->Location = System::Drawing::Point(12, 16);
-			this->BackButton->Name = L"BackButton";
-			this->BackButton->Size = System::Drawing::Size(76, 26);
-			this->BackButton->TabIndex = 27;
-			this->BackButton->Text = L"Back";
-			this->BackButton->UseVisualStyleBackColor = true;
-			this->BackButton->Click += gcnew System::EventHandler(this, &MyForm1::BackButton_Click);
-			// 
-			// label14
-			// 
-			this->label14->AutoSize = true;
-			this->label14->BackColor = System::Drawing::Color::White;
-			this->label14->Font = (gcnew System::Drawing::Font(L"Arial Narrow", 20.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->label14->Location = System::Drawing::Point(403, 277);
-			this->label14->Name = L"label14";
-			this->label14->Size = System::Drawing::Size(234, 31);
-			this->label14->TabIndex = 29;
-			this->label14->Text = L"(ADD NEW PATIENT)";
-			this->label14->Click += gcnew System::EventHandler(this, &MyForm1::label14_Click);
-			// 
-			// Gender
-			// 
-			this->Gender->FormattingEnabled = true;
-			this->Gender->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Male", L"Female" });
-			this->Gender->Location = System::Drawing::Point(73, 132);
-			this->Gender->Name = L"Gender";
-			this->Gender->Size = System::Drawing::Size(107, 21);
-			this->Gender->TabIndex = 30;
-			// 
-			// CivilStatus
-			// 
-			this->CivilStatus->FormattingEnabled = true;
-			this->CivilStatus->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"Single", L"Married", L"Widowed", L"Divorce" });
-			this->CivilStatus->Location = System::Drawing::Point(73, 350);
-			this->CivilStatus->Name = L"CivilStatus";
-			this->CivilStatus->Size = System::Drawing::Size(107, 21);
-			this->CivilStatus->TabIndex = 31;
+			this->submitButton->Location = System::Drawing::Point(100, 430);
+			this->submitButton->Name = L"submitButton";
+			this->submitButton->Size = System::Drawing::Size(100, 30);
+			this->submitButton->TabIndex = 13;
+			this->submitButton->Text = L"Submit";
+			this->submitButton->UseVisualStyleBackColor = true;
+			this->submitButton->Click += gcnew System::EventHandler(this, &MyForm1::submitButton_Click);
 			// 
 			// MyForm1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::Color::CadetBlue;
-			this->ClientSize = System::Drawing::Size(720, 445);
-			this->Controls->Add(this->CivilStatus);
-			this->Controls->Add(this->Gender);
-			this->Controls->Add(this->label14);
-			this->Controls->Add(this->BackButton);
-			this->Controls->Add(this->button2);
-			this->Controls->Add(this->button1);
-			this->Controls->Add(this->Diagnosis);
-			this->Controls->Add(this->label12);
-			this->Controls->Add(this->email);
-			this->Controls->Add(this->label11);
-			this->Controls->Add(this->bloodtype);
-			this->Controls->Add(this->label10);
-			this->Controls->Add(this->textBox10);
-			this->Controls->Add(this->label9);
-			this->Controls->Add(this->label8);
-			this->Controls->Add(this->religion);
-			this->Controls->Add(this->label7);
-			this->Controls->Add(this->nationality);
-			this->Controls->Add(this->label6);
-			this->Controls->Add(this->birthplace);
-			this->Controls->Add(this->label5);
-			this->Controls->Add(this->Address);
-			this->Controls->Add(this->label4);
-			this->Controls->Add(this->Contact);
-			this->Controls->Add(this->label3);
-			this->Controls->Add(this->label2);
-			this->Controls->Add(this->age);
-			this->Controls->Add(this->label1);
-			this->Controls->Add(this->Fullname);
+			this->ClientSize = System::Drawing::Size(300, 500);
+			this->Controls->Add(this->submitButton);
+			this->Controls->Add(this->diagnosisBox);
+			this->Controls->Add(this->emailBox);
+			this->Controls->Add(this->bloodBox);
+			this->Controls->Add(this->birthBox);
+			this->Controls->Add(this->civilBox);
+			this->Controls->Add(this->religionBox);
+			this->Controls->Add(this->nationalityBox);
+			this->Controls->Add(this->birthplaceBox);
+			this->Controls->Add(this->addressBox);
+			this->Controls->Add(this->contactBox);
+			this->Controls->Add(this->genderBox);
+			this->Controls->Add(this->ageBox);
+			this->Controls->Add(this->nameBox);
 			this->Name = L"MyForm1";
-			this->Text = L"birthdate";
-			this->Load += gcnew System::EventHandler(this, &MyForm1::MyForm1_Load);
+			this->Text = L"Add Patient Data";
 			this->ResumeLayout(false);
 			this->PerformLayout();
-
 		}
 #pragma endregion
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {Clear
+
+	private: System::Void submitButton_Click(System::Object^ sender, System::EventArgs^ e) {
+		sql::mysql::MySQL_Driver* driver;
+		sql::Connection* con;
+		driver = sql::mysql::get_mysql_driver_instance();
+		con = driver->connect("tcp://127.0.0.1:3306", "root", "");
+		con->setSchema("testdb");
+
+		std::string name = msclr::interop::marshal_as<std::string>(nameBox->Text);
+		int age = Convert::ToInt32(ageBox->Text);
+		std::string gender = msclr::interop::marshal_as<std::string>(genderBox->Text);
+		std::string contact = msclr::interop::marshal_as<std::string>(contactBox->Text);
+		std::string address = msclr::interop::marshal_as<std::string>(addressBox->Text);
+		std::string birthplace = msclr::interop::marshal_as<std::string>(birthplaceBox->Text);
+		std::string nationality = msclr::interop::marshal_as<std::string>(nationalityBox->Text);
+		std::string religion = msclr::interop::marshal_as<std::string>(religionBox->Text);
+		std::string civil = msclr::interop::marshal_as<std::string>(civilBox->Text);
+		std::string birth = msclr::interop::marshal_as<std::string>(birthBox->Text);
+		std::string blood = msclr::interop::marshal_as<std::string>(bloodBox->Text);
+		std::string email = msclr::interop::marshal_as<std::string>(emailBox->Text);
+		std::string diagnosis = msclr::interop::marshal_as<std::string>(diagnosisBox->Text);
+
+		auto now = std::chrono::system_clock::now();
+		std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
+		char buffer[20];
+		std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", std::localtime(&currentTime));
+		std::string dMission = buffer;
+
+		try {
+			std::unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement("INSERT INTO patients(name, age, gender, contact_number, address, birthplace, nationality, religion, civil_status, birthday, date_of_admission, blood_type, email_address, diagnosis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"));
+			pstmt->setString(1, name);
+			pstmt->setInt(2, age);
+			pstmt->setString(3, gender);
+			pstmt->setString(4, contact);
+			pstmt->setString(5, address);
+			pstmt->setString(6, birthplace);
+			pstmt->setString(7, nationality);
+			pstmt->setString(8, religion);
+			pstmt->setString(9, civil);
+			pstmt->setString(10, birth);
+			pstmt->setString(11, dMission);
+			pstmt->setString(12, blood);
+			pstmt->setString(13, email);
+			pstmt->setString(14, diagnosis);
+
+			pstmt->executeUpdate();
+		} catch (sql::SQLException &e) {
+			MessageBox::Show("Error: " + gcnew String(e.what()), "Database Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+
+		delete con;
+		this->Close();
 	}
-private: System::Void BackButton_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void label14_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void MyForm1_Load(System::Object^ sender, System::EventArgs^ e) {
-}
-};
+	};
 }
