@@ -1,7 +1,12 @@
 #pragma once
 
-namespace Project1 {
+#include <mysql_driver.h>
+#include <mysql_connection.h>
+#include "Patient_Information.h"
+#include "All_Patient.h"
+#include "Signupform.h"
 
+namespace Project1 {
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -9,24 +14,17 @@ namespace Project1 {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Summary for MyForm
-	/// </summary>
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
 		MyForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			connectToDatabase();
+			loadRegistryFromDatabase();
 		}
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
 		~MyForm()
 		{
 			if (components)
@@ -35,191 +33,132 @@ namespace Project1 {
 			}
 		}
 
-	private: System::Windows::Forms::Button^ ViewPatient;
+	private: sql::mysql::MySQL_Driver* driver;
+	private: sql::Connection* con;
+	private: std::vector<Person> registry;
 
-	private: System::Windows::Forms::Button^ AddPatient;
-	private: System::Windows::Forms::ComboBox^ Search_Patient;
-	private: System::Windows::Forms::Label^ SrchPatient;
-
-
-	private: System::DirectoryServices::DirectorySearcher^ directorySearcher1;
-	private: System::Windows::Forms::Label^ Patient_number;
-	private: System::Windows::Forms::MenuStrip^ menuStrip1;
-	private: System::Windows::Forms::ToolStripMenuItem^ exitToolStripMenuItem;
-	private: System::Windows::Forms::Label^ PatientRecords;
-
-
-
-	protected:
-
-
-	protected:
+	private: System::Windows::Forms::Button^ addButton;
+	private: System::Windows::Forms::Button^ viewButton;
+	private: System::Windows::Forms::Button^ findButton;
 
 	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->ViewPatient = (gcnew System::Windows::Forms::Button());
-			this->AddPatient = (gcnew System::Windows::Forms::Button());
-			this->Search_Patient = (gcnew System::Windows::Forms::ComboBox());
-			this->SrchPatient = (gcnew System::Windows::Forms::Label());
-			this->directorySearcher1 = (gcnew System::DirectoryServices::DirectorySearcher());
-			this->Patient_number = (gcnew System::Windows::Forms::Label());
-			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
-			this->exitToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->PatientRecords = (gcnew System::Windows::Forms::Label());
-			this->menuStrip1->SuspendLayout();
+			this->addButton = (gcnew System::Windows::Forms::Button());
+			this->viewButton = (gcnew System::Windows::Forms::Button());
+			this->findButton = (gcnew System::Windows::Forms::Button());
+
 			this->SuspendLayout();
+
 			// 
-			// ViewPatient
+			// addButton
 			// 
-			this->ViewPatient->Font = (gcnew System::Drawing::Font(L"Arial Narrow", 20.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->ViewPatient->Location = System::Drawing::Point(101, 320);
-			this->ViewPatient->Name = L"ViewPatient";
-			this->ViewPatient->Padding = System::Windows::Forms::Padding(2);
-			this->ViewPatient->Size = System::Drawing::Size(301, 45);
-			this->ViewPatient->TabIndex = 3;
-			this->ViewPatient->Text = L"VIEW ALL PATIENT";
-			this->ViewPatient->UseVisualStyleBackColor = true;
+			this->addButton->Location = System::Drawing::Point(50, 50);
+			this->addButton->Name = L"addButton";
+			this->addButton->Size = System::Drawing::Size(200, 50);
+			this->addButton->TabIndex = 0;
+			this->addButton->Text = L"Add Patient";
+			this->addButton->UseVisualStyleBackColor = true;
+			this->addButton->Click += gcnew System::EventHandler(this, &MyForm::addButton_Click);
+
 			// 
-			// AddPatient
+			// viewButton
 			// 
-			this->AddPatient->Font = (gcnew System::Drawing::Font(L"Arial Narrow", 20.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->AddPatient->Location = System::Drawing::Point(145, 269);
-			this->AddPatient->Name = L"AddPatient";
-			this->AddPatient->Padding = System::Windows::Forms::Padding(2);
-			this->AddPatient->Size = System::Drawing::Size(217, 45);
-			this->AddPatient->TabIndex = 4;
-			this->AddPatient->Text = L"ADD PATIENT";
-			this->AddPatient->UseVisualStyleBackColor = true;
+			this->viewButton->Location = System::Drawing::Point(50, 120);
+			this->viewButton->Name = L"viewButton";
+			this->viewButton->Size = System::Drawing::Size(200, 50);
+			this->viewButton->TabIndex = 1;
+			this->viewButton->Text = L"View All Patients";
+			this->viewButton->UseVisualStyleBackColor = true;
+			this->viewButton->Click += gcnew System::EventHandler(this, &MyForm::viewButton_Click);
+
 			// 
-			// Search_Patient
+			// findButton
 			// 
-			this->Search_Patient->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
-			this->Search_Patient->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
-			this->Search_Patient->FormattingEnabled = true;
-			this->Search_Patient->Location = System::Drawing::Point(101, 183);
-			this->Search_Patient->Name = L"Search_Patient";
-			this->Search_Patient->Size = System::Drawing::Size(301, 21);
-			this->Search_Patient->TabIndex = 6;
-			this->Search_Patient->Tag = L"";
-			this->Search_Patient->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::Search_Patient_SelectedIndexChanged);
-			// 
-			// SrchPatient
-			// 
-			this->SrchPatient->AutoSize = true;
-			this->SrchPatient->BackColor = System::Drawing::SystemColors::ControlLight;
-			this->SrchPatient->Font = (gcnew System::Drawing::Font(L"Arial Narrow", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->SrchPatient->Location = System::Drawing::Point(204, 160);
-			this->SrchPatient->Name = L"SrchPatient";
-			this->SrchPatient->Size = System::Drawing::Size(95, 20);
-			this->SrchPatient->TabIndex = 7;
-			this->SrchPatient->Text = L"Search Patient";
-			this->SrchPatient->Click += gcnew System::EventHandler(this, &MyForm::label1_Click_1);
-			// 
-			// directorySearcher1
-			// 
-			this->directorySearcher1->ClientTimeout = System::TimeSpan::Parse(L"-00:00:01");
-			this->directorySearcher1->ServerPageTimeLimit = System::TimeSpan::Parse(L"-00:00:01");
-			this->directorySearcher1->ServerTimeLimit = System::TimeSpan::Parse(L"-00:00:01");
-			// 
-			// Patient_number
-			// 
-			this->Patient_number->AutoSize = true;
-			this->Patient_number->Location = System::Drawing::Point(411, 188);
-			this->Patient_number->Name = L"Patient_number";
-			this->Patient_number->Size = System::Drawing::Size(0, 13);
-			this->Patient_number->TabIndex = 8;
-			// 
-			// menuStrip1
-			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->exitToolStripMenuItem });
-			this->menuStrip1->Location = System::Drawing::Point(0, 0);
-			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(497, 24);
-			this->menuStrip1->TabIndex = 9;
-			this->menuStrip1->Text = L"menuStrip1";
-			// 
-			// exitToolStripMenuItem
-			// 
-			this->exitToolStripMenuItem->Name = L"exitToolStripMenuItem";
-			this->exitToolStripMenuItem->Size = System::Drawing::Size(38, 20);
-			this->exitToolStripMenuItem->Text = L"Exit";
-			this->exitToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::exitToolStripMenuItem_Click);
-			// 
-			// PatientRecords
-			// 
-			this->PatientRecords->AutoSize = true;
-			this->PatientRecords->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(224)), static_cast<System::Int32>(static_cast<System::Byte>(224)),
-				static_cast<System::Int32>(static_cast<System::Byte>(224)));
-			this->PatientRecords->Font = (gcnew System::Drawing::Font(L"Arial Narrow", 27.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->PatientRecords->Location = System::Drawing::Point(146, 54);
-			this->PatientRecords->Name = L"PatientRecords";
-			this->PatientRecords->Size = System::Drawing::Size(234, 43);
-			this->PatientRecords->TabIndex = 10;
-			this->PatientRecords->Text = L"Patient Records";
-			this->PatientRecords->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			this->PatientRecords->Click += gcnew System::EventHandler(this, &MyForm::label1_Click_2);
+			this->findButton->Location = System::Drawing::Point(50, 190);
+			this->findButton->Name = L"findButton";
+			this->findButton->Size = System::Drawing::Size(200, 50);
+			this->findButton->TabIndex = 2;
+			this->findButton->Text = L"Find Patient";
+			this->findButton->UseVisualStyleBackColor = true;
+			this->findButton->Click += gcnew System::EventHandler(this, &MyForm::findButton_Click);
+
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::Color::CadetBlue;
-			this->ClientSize = System::Drawing::Size(497, 396);
-			this->Controls->Add(this->PatientRecords);
-			this->Controls->Add(this->Patient_number);
-			this->Controls->Add(this->SrchPatient);
-			this->Controls->Add(this->Search_Patient);
-			this->Controls->Add(this->AddPatient);
-			this->Controls->Add(this->ViewPatient);
-			this->Controls->Add(this->menuStrip1);
-			this->MainMenuStrip = this->menuStrip1;
+			this->ClientSize = System::Drawing::Size(284, 311);
+			this->Controls->Add(this->findButton);
+			this->Controls->Add(this->viewButton);
+			this->Controls->Add(this->addButton);
 			this->Name = L"MyForm";
-			this->Text = L"MyForm";
-			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
-			this->menuStrip1->ResumeLayout(false);
-			this->menuStrip1->PerformLayout();
+			this->Text = L"Patient Information System";
 			this->ResumeLayout(false);
-			this->PerformLayout();
 
 		}
 #pragma endregion
-	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
-	}
-	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-	}
-	private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
-	}
-private: System::Void Search_Patient_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 
-	String^ patient = Search_Patient->Text;
-	int^ index = Search_Patient->SelectedIndex;
+	private:
+		void connectToDatabase() {
+			try {
+				driver = sql::mysql::get_mysql_driver_instance();
+				con = driver->connect("tcp://127.0.0.1:3306", "root", "");
+				con->setSchema("testdb");
+			}
+			catch (sql::SQLException& e) {
+				MessageBox::Show("Failed to connect to database.");
+				exit(EXIT_FAILURE);
+			}
+		}
 
-	SrchPatient->Text = patient;
-	Patient_number->Text = index->ToString();
-}
-private: System::Void exitToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-	Windows::Forms::DialogResult dr = MessageBox::Show("Are you sure you want to Exit?", "Warning", MessageBoxButtons::YesNo, MessageBoxIcon::Warning);
+		void loadRegistryFromDatabase() {
+			try {
+				std::unique_ptr<sql::Statement> stmt(con->createStatement());
+				std::unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT name, age, gender, contact_number, address, birthplace, nationality, religion, civil_status, birthday, date_of_admission, blood_type, email_address, diagnosis FROM patients"));
 
-	if (dr == Windows::Forms::DialogResult::Yes)Application::Exit();
-}
-private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void label1_Click_2(System::Object^ sender, System::EventArgs^ e) {
-}
-};
+				while (res->next()) {
+					Person person;
+					person.name = res->getString("name");
+					person.age = res->getInt("age");
+					person.gender = res->getString("gender");
+					person.contactNumber = res->getString("contact_number");
+					person.address = res->getString("address");
+					person.birthplace = res->getString("birthplace");
+					person.nationality = res->getString("nationality");
+					person.religion = res->getString("religion");
+					person.civil = res->getString("civil_status");
+					person.birth = res->getString("birthday");
+					person.dMission = res->getString("date_of_admission");
+					person.Tblo = res->getString("blood_type");
+					person.emailAddress = res->getString("email_address");
+					person.diagnosis = res->getString("diagnosis");
+
+					registry.push_back(person);
+				}
+			}
+			catch (sql::SQLException& e) {
+				MessageBox::Show("Failed to load data from database.");
+				exit(EXIT_FAILURE);
+			}
+		}
+
+		void addButton_Click(System::Object^ sender, System::EventArgs^ e) {
+			MyForm1^ form1 = gcnew MyForm1(&registry);
+			form1->ShowDialog();
+		}
+
+		void viewButton_Click(System::Object^ sender, System::EventArgs^ e) {
+			MyForm11^ form11 = gcnew MyForm11(&registry);
+			form11->ShowDialog();
+		}
+
+		void findButton_Click(System::Object^ sender, System::EventArgs^ e) {
+			MyForm12^ form12 = gcnew MyForm12(&registry);
+			form12->ShowDialog();
+		}
+	};
 }
