@@ -1,0 +1,5 @@
+C:\Users\Administrator\Desktop\Patient Information System\Patient_Information_System\Patient_.E23E8819\x64\Debug\Patient_Information_System.vcxproj.AssemblyReference.cache
+C:\Users\Administrator\Desktop\Patient Information System\Patient_Information_System\Patient_.E23E8819\x64\Debug\PatientInformationSystem.Addpatient.resources
+C:\Users\Administrator\Desktop\Patient Information System\Patient_Information_System\Patient_.E23E8819\x64\Debug\PatientInformationSystem.Frontpage.resources
+C:\Users\Administrator\Desktop\Patient Information System\Patient_Information_System\Patient_.E23E8819\x64\Debug\PatientInformationSystem.ResultPage.resources
+C:\Users\Administrator\Desktop\Patient Information System\Patient_Information_System\Patient_.E23E8819\x64\Debug\Patient_Information_System.vcxproj.GenerateResource.cache
